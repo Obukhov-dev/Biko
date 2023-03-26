@@ -23,7 +23,7 @@ async def main():
     # Все glob сообщения
     global chat_msgs
 
-    put_markdown("## Привет! Это web мессенджер Biko. \n Укажите свой ник и общайтесь свободно.")
+    put_markdown("## Biko \n Защищенный. Быстрый. Свободный.")
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
     nickname = await input("Войти в чат", required=True, placeholder="Ваше имя",
@@ -56,6 +56,8 @@ async def main():
     toast("Вы вышли из чата")
     msg_box.append(put_markdown(f"🔊  `{nickname}` покинул чат"))
     chat_msgs.append(('🔊', f"  `{nickname}` покинул чат"))
+
+    put_buttons(['Перезайти'], onclick=lambda btn: run_js('window.location.reload()'))
 
 
 # Сама функция для обновления списка сообщений в чате, которая каждую 1 секунду обновляет чат.
