@@ -79,4 +79,4 @@ async def refresh_msg(nickname, msg_box):
 
 # запускаем web сервер (стандартно tornado. Можно django flask fast api)
 if __name__ == "__main__":
-    start_server(main, debug=True, port=8080, cdn=False)
+    start_server(main, debug=True, port=5000, cdn=False)
