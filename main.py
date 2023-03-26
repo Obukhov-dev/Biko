@@ -26,11 +26,12 @@ async def main():
     put_markdown("## Привет! Это web мессенджер Biko. \n Укажите свой ник и общайтесь свободно.")
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
+    nickname = await input("Войти в чат", required=True, placeholder="Ваше имя",
+                           validate=lambda n: "Такой ник уже используется!" if n in online_users or n == '📢' else None)
+    online_users.add(nickname)
 
-    nickname = await input("Войти в чат", required=True,
-                           placeholder="Ваш ник Под ним вас будут видеть другие пользователи 🤫 🤩 😄",
-                           validate=lambda n: 'Такой ник уже используется' if n in online_users or n == '!!!' else None)
-    online_users.add(('!!!!', f"🔊 {nickname} присоединился к чату"))
+    chat_msgs.append(('🔊 ', f'`{nickname}` присоединился к чату!'))
+    msg_box.append(put_markdown(f'🔊 `{nickname}` присоединился к чату'))
 
     # функция асинхронного обновление списка сообщений
     refresh_task = run_async(refresh_msg(nickname, msg_box))
@@ -45,7 +46,7 @@ async def main():
         if data is None:
             break
 
-        msg_box.append(put_markdown(f"{nickname} : {data['msg']}"))
+        msg_box.append(put_markdown(f"`{nickname}` : {data['msg']}"))
         chat_msgs.append((nickname, data['msg']))
 
     # exit chat
@@ -53,8 +54,8 @@ async def main():
 
     online_users.remove(nickname)
     toast("Вы вышли из чата")
-    msg_box.append(put_markdown(f"🔊 Пользователь {nickname} покинул чат"))
-    chat_msgs.append(('🔊', f" Пользователь {nickname} покинул чат"))
+    msg_box.append(put_markdown(f"🔊  `{nickname}` покинул чат"))
+    chat_msgs.append(('🔊', f"  `{nickname}` покинул чат"))
 
 
 # Сама функция для обновления списка сообщений в чате, которая каждую 1 секунду обновляет чат.
@@ -68,7 +69,7 @@ async def refresh_msg(nickname, msg_box):
 
         for m in chat_msgs[last_idx:]:
             if m[0] != nickname:
-                msg_box.append(put_markdown(f"'{m[0]} : {m[1]}"))
+                msg_box.append(put_markdown(f"`{m[0]}` : {m[1]}"))
 
         # Очищаем все сообщения, которые больше предела Max_messages_count
         if len(chat_msgs) > MAX_MESSAGES_COUNT:
