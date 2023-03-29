@@ -1,13 +1,13 @@
-Онлайн Web чат.
+Online Web Chat.
 
-Технологии
+Technologies
 Web - pywebio
-python
-хост - ngrok
+ python 
+test host - ngrok
 
-Проект для хакатона).
+A project for a hackathon).
 
-0) Необходимо установить ngrok загрузчик (где будет тестовый хост) + регистрация.
-1) Запуск runSite.cmd
-2) Запуск runServ.cmd (Предварительно необходимо авторизоваться на хосте ngrok, а точнее в проге (подкинув ключ).)
-3) Переходим по ссылке из runServ.cmd (поле Forwarding, первая ссылка.)
+0) You need to install ngrok bootloader (where the test host will be) + registration.
+1) Running runSite.cmd
+2) Launch runServ.cmd (First you need to log in to the ngrok host, or rather in the prog (by throwing a key).)
+3) Follow the link from runServ.cmd (Forwarding field, the first link.)
