@@ -1,4 +1,6 @@
-# Biko messenger
-Task for hackathon h1
+Проект для хакатона).
 
-Protected. Fast. Free. 
+0) Необходимо установить ngrok загрузчик + регистрация.
+1) Запуск runSite.cmd
+2) Запуск runServ.cmd (Предварительно необходимо авторизоваться на хосте ngrok, а точнее в проге (подкинув ключ).)
+3) Переходим по ссылке из runServ.cmd (поле Forwarding, первая ссылка.)
