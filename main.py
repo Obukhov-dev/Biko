@@ -3,14 +3,15 @@ from pywebio.input import *
 from pywebio.output import *
 from pywebio.session import run_async, run_js
 
-# Для ..
+# Для асинхронного обновления окна с сообщениями
 import asyncio
 
-#
+# Глобальные переменные
 chat_msgs = []
 online_users = set()
+emojis = ['ㅤ', '👍', '👎', '😊', '😂', '😍', '🤔', '😘', '😎', '😉', '🙃', '🤯']
 
-# Максимальное количество сообщений в чате
+# Максимальное количество сообщений одновременно в чате
 MAX_MESSAGES_COUNT = 100
 
 
@@ -23,14 +24,14 @@ async def main():
     # Все glob сообщения
     global chat_msgs
 
-    put_markdown("## Biko \n Защищенный. Быстрый. Свободный.")
+    put_markdown("## Biko \n Безопасный. Быстрый. Свободный.")
     msg_box = output()
     put_scrollable(msg_box, height=300, keep_bottom=True)
     nickname = await input("Войти в чат", required=True, placeholder="Ваше имя",
                            validate=lambda n: "Такой ник уже используется!" if n in online_users or n == '📢' else None)
     online_users.add(nickname)
 
-    chat_msgs.append(('🔊 ', f'`{nickname}` присоединился к чату!'))
+    chat_msgs.append(('🔊', f'`{nickname}` присоединился к чату!'))
     msg_box.append(put_markdown(f'🔊 `{nickname}` присоединился к чату'))
 
     # функция асинхронного обновление списка сообщений
@@ -40,22 +41,25 @@ async def main():
     while True:
         data = await input_group("💬 Новое сообщение", [
             input(placeholder="Текст сообщения", name="msg"),
+            select(name="emoji", options=emojis, label="Выберите смайлик"),
             actions(name="cmd", buttons=["Отправить", {'label': 'Выйти из чата', 'type': 'cancel'}])
         ], validate=lambda m: ('msg', "Введите текст сообщения!") if m["cmd"] == "Отправить" and not m['msg'] else None)
 
         if data is None:
             break
 
-        msg_box.append(put_markdown(f"`{nickname}` : {data['msg']}"))
-        chat_msgs.append((nickname, data['msg']))
+        # В сообщение добавляем выбранный смайлик
+        msg = data['msg'] + ' ' + data.get('emoji', '')
+        msg_box.append(put_markdown(f"`{nickname}` : {msg}"))
+        chat_msgs.append((nickname, msg))
 
     # exit chat
     refresh_task.close()
 
     online_users.remove(nickname)
     toast("Вы вышли из чата")
-    msg_box.append(put_markdown(f"🔊  `{nickname}` покинул чат"))
-    chat_msgs.append(('🔊', f"  `{nickname}` покинул чат"))
+    msg_box.append(put_markdown(f"🔈 `{nickname}` покинул чат"))
+    chat_msgs.append(('🔈', f"  `{nickname}` покинул чат"))
 
     put_buttons(['Перезайти'], onclick=lambda btn: run_js('window.location.reload()'))
 
@@ -80,6 +84,6 @@ async def refresh_msg(nickname, msg_box):
         last_idx = len(chat_msgs)
 
 
-# запускаем web сервер (стандартно tornado. Можно django flask fast api)
+# запускаем web сервер (стандартно tornado из документации)
 if __name__ == "__main__":
     start_server(main, debug=True, port=5000, cdn=False)
