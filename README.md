@@ -1,9 +1,9 @@
 Online Web Chat.
 
-Technologies
-Web - pywebio
- python 
-test host - ngrok
+Technologies:
+ Web - pywebio,
+ python, 
+ test host - ngrok.
 
 A project for a hackathon).
 
